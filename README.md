@@ -6,34 +6,34 @@ It recommends movies based on the user-selected movie using TF-IDF and cosine si
 ---
 
 ## 🚀 Features
+- Content-based movie recommendation
 - Recommends similar movies to the selected movie
-- Uses TF-IDF vectorization and cosine similarity
-- Simple and interactive UI built with Streamlit
+- Simple and interactive web interface using Streamlit
+
+---
+
+## 🛠️ Technologies Used
+- Python 3.x
+- Pandas
+- Scikit-learn
+- Streamlit
 
 ---
 
 ## 🖼️ Screenshots
 
-### 🏠 Home Page
-![Home Page](screenshots/home.png)
+### Home Page
+<img src="./screenshots/home.png" width="600"/>
 
-### 🎥 Movie Recommendations
-![Movie Recommendations](screenshots/recommendations.png)
-
----
-
-## 🛠️ Tech Stack
-- Python
-- Streamlit
-- Pandas
-- Scikit-learn
+### Movie Recommendations
+<img src="./screenshots/recommendations.png" width="600"/>
 
 ---
 
 ## ▶️ How to Run the Project
 
 1. Clone or download the repository
-2. Open the project folder in **VS Code**
+2. Open the project folder in VS Code
 3. Open terminal in the project directory
 4. Install required libraries:
    ```bash
