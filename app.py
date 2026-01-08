@@ -3,44 +3,53 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# -------------------------------
-# Page config
-# -------------------------------
-st.set_page_config(
-    page_title="Movie Recommendation System",
-    layout="centered"
-)
-
-st.title("🎬 Movie Recommendation System")
-st.write("Select a movie you like and get similar movie recommendations.")
-
-# -------------------------------
-# Load dataset
-# -------------------------------
+# Load movie data
 @st.cache_data
 def load_data():
     return pd.read_csv("movies.csv")
 
 movies = load_data()
 
-# -------------------------------
-# Vectorization & similarity
-# -------------------------------
-@st.cache_data
-def compute_similarity(data):
-    tfidf = TfidfVectorizer(stop_words="english")
-    tfidf_matrix = tfidf.fit_transform(data["overview"].fillna(""))
-    similarity = cosine_similarity(tfidf_matrix)
-    return similarity
+# Create TF-IDF matrix
+tfidf = TfidfVectorizer(stop_words="english")
+tfidf_matrix = tfidf.fit_transform(movies["overview"].fillna(""))
 
-similarity = compute_similarity(movies)
+# Compute similarity
+similarity = cosine_similarity(tfidf_matrix)
 
-# -------------------------------
 # Recommendation function
-# -------------------------------
 def recommend(movie_name):
     try:
         index = movies[movies["title"] == movie_name].index[0]
         distances = similarity[index]
 
         movie_list = sorted(
+            list(enumerate(distances)),
+            reverse=True,
+            key=lambda x: x[1]
+        )[1:6]
+
+        return [movies.iloc[i[0]]["title"] for i in movie_list]
+    except:
+        return []
+
+# Streamlit UI
+st.set_page_config(page_title="Movie Recommendation System")
+
+st.title("🎬 Movie Recommendation System")
+st.write("Select a movie to get similar recommendations")
+
+selected_movie = st.selectbox(
+    "Select a movie you like",
+    movies["title"].values
+)
+
+if st.button("Show Recommendations"):
+    recommendations = recommend(selected_movie)
+
+    if recommendations:
+        st.subheader("Recommended Movies:")
+        for movie in recommendations:
+            st.write("👉", movie)
+    else:
+        st.warning("No recommendations found.")
